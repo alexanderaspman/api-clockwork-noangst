@@ -2,8 +2,8 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 import  app  from './server'
 
-app.listen(3008,()=>{
-     console.log('hello on http://fuckYouDin:3003')
+app.listen(3002,()=>{
+     console.log('hello on http://fuckYouDin:3002')
 })
 
 export default app

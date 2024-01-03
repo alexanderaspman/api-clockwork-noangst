@@ -5,6 +5,5 @@
     "strict": false,
     "lib": ["esnext"],
     "esModuleInterop": true,
-    "rootDir": "./src"
   }
 }

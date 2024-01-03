@@ -12,9 +12,7 @@ app.use(morgan('dev'))
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-app.use('',(req,res,next)=>{
-    
-})
+
 app.get('/', (req,res )=>{
 console.log("hey")
 res.status(200 )

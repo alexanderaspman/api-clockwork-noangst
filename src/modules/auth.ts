@@ -17,7 +17,8 @@ export const createJWT = (user)=>{
     const token = jwt.sign({
 
         id:user.id,
-        username:user.username
+        name:user.name,
+        email:user.email
     },
     process.env.JWT_SECRET
     )
@@ -47,6 +48,6 @@ export const protect = (req,res,next)=>{
     
     catch (e){
         res.status(401)
-        res.json({message: 'auh auh auh, you need to respect my authority! Token is black'})
+        res.json({message: 'auh auh auh, you need to respect my authority! Token dont seem right'})
     }
 }

@@ -11,7 +11,7 @@ const user = await prisma.user.create({
     }
 })
 
-const token = createJWT(user)
+ const token = createJWT(user)
 res.json({token})
 }
 export const signin = async (req,res) =>{
@@ -21,10 +21,15 @@ export const signin = async (req,res) =>{
             email: req.body.email
         }
     })
-const isValid = await comparePassword(req.body.password,user.password)
+ const isValid = await comparePassword(req.body.password,user.password)
 if(!isValid){
 
 res.status(401)
-res.json({message:'auh auh auh, auth not valid!'})
+res.json({message:'no auth for you! I am not a nazi, there is a valid way to do this.'})
+return 
 }
+
+const token = createJWT(user)
+res.json({token})
+
 }
