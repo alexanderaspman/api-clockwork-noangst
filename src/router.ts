@@ -23,18 +23,18 @@ router.post('/product',body('name').isString(),handleInputErrors, createProduct)
 /*Update*/
 
 
-router.get('/update',getOneUpdate)
-router.get('/update/:id',getUpdates)
+router.get('/update', getUpdates)
+router.get('/update/:id',  getOneUpdate  )
 
 router.put('/update/:id',
-body('title').optional(),
-body('body').optional(), 
-body('status').isIn([
+body('title').isString(),
+body('body').isString(), 
+body('updateStatus').isIn([
     'IN_PROGRESS',
     'UPDATED',
     'DELETED',
     'ARCHIVED',
-]).optional(),
+]).isString(),
 body('version').optional(), updateUpdate)
 router.delete('/update/:id',deleteUpdate)
 router.post('/update',

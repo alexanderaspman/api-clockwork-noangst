@@ -1,7 +1,7 @@
 import prisma from "../db"
 
 export const getOneUpdate = async (req,res) =>{
-const update = await prisma.update.findFirst ({
+const update = await prisma.update.findUnique ({
     where:
     {
                 id:req.params.id
@@ -36,9 +36,10 @@ if(!product){
     res.json({message:"sorry, not sorry"})
 }
 const update = await prisma.update.create({
-    data:{title:req.body.title,
+    data:{
+    title:req.body.title,
     body:req.body.body,
-product:{connect:{id:product.id}}}
+    product:{connect:{id:product.id}}}
          
 })
 res.json({data: update })
