@@ -23,6 +23,8 @@ const product = await prisma.product.findUnique({
 })
 res.json({data: product})
 }
+
+//skapa en produkt
 export const createProduct = async (req,res) =>{
     const product = await prisma.product.create({
         data:{name:req.body.name,
@@ -30,6 +32,7 @@ export const createProduct = async (req,res) =>{
     })
 res.json({data:product})
 }
+//uppdatera en produkt
 export const updateProduct = async (req,res) =>{
     const update = await prisma.product.update({
         where:{
@@ -42,6 +45,7 @@ export const updateProduct = async (req,res) =>{
     })
     res.json({data:update})
 }
+//ta bort en produkt
 export const deleteProduct = async (req,res) =>{
 const deleted = await prisma.product.delete({
     where:{
