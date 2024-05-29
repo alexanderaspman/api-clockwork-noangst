@@ -1,1 +1,14 @@
-[]
+[
+    {
+        "http_method": "GET",
+        "route": "/UserDb",
+        "function_name": "newFunction",
+        "secret_name": "alexander",
+        "validation_method": "SECRET_AS_QUERY_PARAM",
+        "respond_result": true,
+        "fetch_custom_user_data": true,
+        "create_user_on_auth": true,
+        "disabled": false,
+        "return_type": "JSON"
+    }
+]
