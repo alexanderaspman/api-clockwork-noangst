@@ -1,92 +1,176 @@
-import prisma from "../db"
+import prisma from "../db";
 
-export const getOneUpdate = async (req,res) =>{
-const update = await prisma.update.findUnique ({
-    where:
-    {
-                id:req.params.id
-} })
-res.json({data:update})
-}
-export const getUpdates = async (req,res) =>{
+// Helper function to send error responses
+const sendError = (res, status, message) => {
+  res.status(status).json({ error: message });
+};
+
+// Get one update
+export const getOneUpdate = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    if (!id) {
+      return sendError(res, 400, "Update ID is required");
+    }
+
+    const update = await prisma.update.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!update) {
+      return sendError(res, 404, "Update not found");
+    }
+
+    res.json({ data: update });
+  } catch (error) {
+    console.error(error);
+    sendError(res, 500, "Internal Server Error");
+  }
+};
+
+// Get all updates
+export const getUpdates = async (req, res) => {
+  try {
+    const products = await prisma.product.findMany({
+      where: {
+        belongsToId: req.user.id,
+      },
+      include: {
+        updates: true,
+      },
+    });
+
+    const updates = products.reduce((allUpdates, product) => {
+      return [...allUpdates, ...product.updates];
+    }, []);
+
+    res.json({ data: updates });
+  } catch (error) {
+    console.error(error);
+    sendError(res, 500, "Internal Server Error");
+  }
+};
+
+// Create an update
+export const createUpdate = async (req, res) => {
+  try {
+    const { productId, title, body } = req.body;
+
+    if (!productId || !title || !body) {
+      return sendError(res, 400, "Product ID, title, and body are required");
+    }
+
+    const product = await prisma.product.findUnique({
+      where: {
+        id: productId,
+      },
+    });
+
+    if (!product) {
+      return sendError(res, 404, "Product not found");
+    }
+
+    const update = await prisma.update.create({
+      data: {
+        title,
+        body,
+        product: { connect: { id: product.id } },
+      },
+    });
+
+    res.json({ data: update });
+  } catch (error) {
+    console.error(error);
+    sendError(res, 500, "Internal Server Error");
+  }
+};
+
+// Update an update
+export const updateUpdate = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { title, body } = req.body;
+
+    if (!id) {
+      return sendError(res, 400, "Update ID is required");
+    }
 
     const products = await prisma.product.findMany({
-        where:{
-            belongsToId:req.user.id 
-        },
-        include:{
-            updates:true
-        }
-    })
-    const updates = products.reduce((allUpdates, product)=>{
-         return[...allUpdates,...product.updates ]
-    },[])
-    res.json({data: updates })
-  
+      where: {
+        belongsToId: req.user.id,
+      },
+      include: {
+        updates: true,
+      },
+    });
 
-}
-export const createUpdate  = async (req,res) =>{
-const product = await prisma.product.findUnique({
-    where:{
-        id:req.body.productId,
-    }
-})
-if(!product){
-    //product ownership does not comply to user
-    res.json({message:"sorry, not sorry"})
-}
-const update = await prisma.update.create({
-    data:{
-    title:req.body.title,
-    body:req.body.body,
-    product:{connect:{id:product.id}}}
-         
-})
-res.json({data: update })
+    const updates = products.reduce((allUpdates, product) => {
+      return [...allUpdates, ...product.updates];
+    }, []);
 
-}
-export const updateUpdate  = async (req,res) =>{
-const products = await prisma.product.findMany({where:{
-    belongsToId:req.user.id,
-},include:{
-    updates:true
-    }
-})
-const updates = products.reduce((allUpdates, product)=>{
-    return[...allUpdates,...product.updates ]
-},[])
-const match = updates.find(update => update.id === req.params.id)
+    const match = updates.find((update) => update.id === id);
 
-if(!match){
-    //checking if user is permitted to update
-    return res.json({message:"and the cow says noooo."})
-}
-const updateUpdate = await prisma.update.update({
-    where:{
-        id: req.params.id
-    },
-    data: req.body
-})
-res.json({data:updateUpdate})
-}
-export const deleteUpdate  = async (req,res) =>{
-    const products = await prisma.product.findMany({where:{
-        belongsToId:req.user.id,
-    },include:{
-        updates:true
-        }
-    })
-    const updates = products.reduce((allUpdates, product)=>{
-        return[...allUpdates,...product.updates ]
-    },[])
-    const match = updates.find(update => update.id === req.params.id)
-    
-    if(!match){
-        //check if user is permitted to delete update
-        return res.json({message:"and the cow says noooo."})
+    if (!match) {
+      return sendError(res, 403, "You are not permitted to update this update");
     }
-const deleted = await prisma.update.delete({where:{
-    id:req.params.id
-}})
-res.json({data:deleted})
-}
+
+    const updateUpdate = await prisma.update.update({
+      where: {
+        id,
+      },
+      data: {
+        title,
+        body,
+      },
+    });
+
+    res.json({ data: updateUpdate });
+  } catch (error) {
+    console.error(error);
+    sendError(res, 500, "Internal Server Error");
+  }
+};
+
+// Delete an update
+export const deleteUpdate = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    if (!id) {
+      return sendError(res, 400, "Update ID is required");
+    }
+
+    const products = await prisma.product.findMany({
+      where: {
+        belongsToId: req.user.id,
+      },
+      include: {
+        updates: true,
+      },
+    });
+
+    const updates = products.reduce((allUpdates, product) => {
+      return [...allUpdates, ...product.updates];
+    }, []);
+
+    const match = updates.find((update) => update.id === id);
+
+    if (!match) {
+      return sendError(res, 403, "You are not permitted to delete this update");
+    }
+
+    const deleted = await prisma.update.delete({
+      where: {
+        id,
+      },
+    });
+
+    res.json({ data: deleted });
+  } catch (error) {
+    console.error(error);
+    sendError(res, 500, "Internal Server Error");
+  }
+};
