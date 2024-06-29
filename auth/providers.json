@@ -1,0 +1,40 @@
+{
+    "api-key": {
+        "name": "api-key",
+        "type": "api-key",
+        "disabled": false
+    },
+    "oauth2-google": {
+        "name": "oauth2-google",
+        "type": "oauth2-google",
+        "disabled": false,
+        "config": {
+            "clientId": "alexanderaspman"
+        },
+        "secret_config": {
+            "clientSecret": "alexander"
+        },
+        "metadata_fields": [
+            {
+                "required": false,
+                "name": "first_name"
+            },
+            {
+                "required": false,
+                "name": "last_name"
+            },
+            {
+                "required": false,
+                "name": "name"
+            },
+            {
+                "required": false,
+                "name": "birthday"
+            },
+            {
+                "required": false,
+                "name": "email"
+            }
+        ]
+    }
+}
