@@ -1,4 +1,5 @@
 {
+      "buildCommand": "run build",
     "framework": "typescript",
     "version": 2,
     "builds": [
