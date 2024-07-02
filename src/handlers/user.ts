@@ -8,31 +8,12 @@ export const createNewUser = async (req:any, res:any) => {
       email: req.body.email,
       password: await hashPassword(req.body.password),
 
-export const createNewUser = async (req,res) =>{
-const user = await prisma.user.createMany({
-    data:{
-        email: req.body.email,
-        password: await hashPassword(req.body.password),
-   
     }
-  });
-
-  const token = createJWT(user);
-  res.json({ token });
-};
-=======
+  })
+  
  const token = createJWT(user)
 res.json({token})
 }
-export const signin = async (req,res) =>{
-    const user = await prisma.user.findUnique({
-        where:{
-            email:req.body.email,
-        }
-    })
- const isValid = await comparePassword(req.body.password,user.password)
-if(!isValid){
-
 
 export const signin = async (req:any, res:any) => {
   const user = await prisma.user.findUnique({

@@ -1,10 +1,9 @@
 {
-    "framework": "node.js",
     "version": 2,
     "builds": [
         {
             "src": "./src/index.ts",
-            "use": "@vercel/node"
+            "use": "@vercel/ts-node"
         }
     ],
     "routes": [
