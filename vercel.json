@@ -1,5 +1,5 @@
 {
-    "framework": "node.js",
+    "framework": "typescript",
     "version": 2,
     "builds": [
         {
