@@ -20,7 +20,7 @@ export const createJWT = (user)=>{
         name:user.name,
         email:user.email
     },
-    process.env.JWT_SECRET
+    process.env.JWT_KEY
     )
     return token
 }
@@ -41,7 +41,7 @@ export const protect = (req,res,next)=>{
         return
     }
     try{
-        const user = jwt.verify(token, process.env.JWT_SECRET)
+        const user = jwt.verify(token, process.env.JWT_KEY)
         req.user = user
         next()
     }
